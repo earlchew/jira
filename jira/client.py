@@ -340,8 +340,12 @@ class JIRA(object):
             logging.warning(e)
 
     def __del__(self):
+        self.close()
+
+    def close(self):
         session = getattr(self, "_session", None)
         if session is not None:
+            self._session = None
             if self.sys_version_info < (3, 4, 0):  # workaround for https://github.com/kennethreitz/requests/issues/2303
                 try:
                     session.close()
